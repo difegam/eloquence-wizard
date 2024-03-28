@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "eloquence wizard"
+version = "0.1.0"
+description = "Eloquence Wizard is a tool that helps you write better by suggesting improvements to your writing. It is designed to help you write more clearly, concisely, and effectively."
+authors = ["difegam <difegam3@gmail.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.32.2"
+langchain = "^0.1.13"
+pydantic-settings = "^2.2.1"
+openai = "^1.14.3"
+langchain-openai = "^0.1.1"
+st-annotated-text = "^4.0.1"
+langchain-anthropic = "^0.1.4"
+
+
+[tool.poetry.group.dev.dependencies]
+watchdog = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
