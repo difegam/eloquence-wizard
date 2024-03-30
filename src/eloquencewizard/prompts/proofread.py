@@ -23,20 +23,10 @@ proofread_output_parser: PydanticOutputParser = PydanticOutputParser(
     pydantic_object=TextProofread
 )
 
-# # Define the prompt for the OpenAI API
-# PROMPT_PROOFREAD = """
-#     Please proofread the following text for spelling and grammar.
-#     Return the corrected text, and Python dictionary of grammar errors and rules violated.
-#     If there are no errors, return simply "No errors".
-#     ---
-#     {text}
-#     ---
-#     {format_instructions}
-#     """
+# Prompt for proofreading
 PROMPT_PROOFREAD = """
 Please proofread the following text for spelling and grammar errors.
-Return the corrected text, removed words, any errors, and violations of rules.
-If there are no errors, simply return "No errors."
+Return the corrected text."
 ---
 {text}
 

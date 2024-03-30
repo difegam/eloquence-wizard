@@ -1,17 +1,16 @@
 import re
 
+from app_types import TypeChat
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     SystemMessagePromptTemplate,
 )
-from langchain_openai import ChatOpenAI
 from prompts.proofread import PROMPT_PROOFREAD, Text
 from prompts.proofread import proofread_output_parser as parser
-from settings import settings
 
 
-def proofread(llm: ChatOpenAI, text: str):
+def proofread(llm: TypeChat, text: str):
     _text = Text(text=text)
     messages = [
         SystemMessagePromptTemplate.from_template(
@@ -32,9 +31,6 @@ def proofread(llm: ChatOpenAI, text: str):
 
     # Call the OpenAI API with the formatted prompt
     output = llm(chat_prompt_with_values.to_messages())
-
-    print(output.content)
-
     return parser.parse(output.content)
 
 

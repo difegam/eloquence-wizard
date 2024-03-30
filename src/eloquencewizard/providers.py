@@ -1,10 +1,12 @@
 from abc import abstractmethod
 from enum import Enum
-from typing import Literal, Optional
+from typing import Literal, Optional, Protocol
 
+from app_types import TypeChat
 from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field, SecretStr
+from settings import settings
 from typing_extensions import Annotated
 
 __all__ = [
@@ -40,8 +42,8 @@ class EnumModels(Enum):
         return self.value
 
     @classmethod
-    def model_names(cls) -> list[str]:
-        return [model.value for model in cls]
+    def model_names(cls) -> tuple[str]:
+        return tuple(model.value for model in cls)
 
     @property
     def model(self) -> Model:
@@ -87,13 +89,20 @@ class OpenAIModels(EnumModels):
         }
 
 
+class ProviderProtocol(Protocol):
+    @abstractmethod
+    def chat(self, model_name: str, temperature: float = 0.5) -> TypeChat: ...
+
+
 class OpenAIProvider(Provider):
     provider: str = Field("openai", description="OpenAI llm")
     models: dict[str, Model] = Field(
         ..., description="List of available models", default_factory=OpenAIModels.models
     )
 
-    def chat(self, model_name: TypeOpenAIModels) -> ChatOpenAI:
+    def chat(
+        self, model_name: TypeOpenAIModels, temperature: float = 0.5
+    ) -> ChatOpenAI:
         model = self.models.get(model_name)
 
         if not model:
@@ -104,6 +113,7 @@ class OpenAIProvider(Provider):
             api_key=self.api_key_value(),
             max_tokens=700,
             verbose=True,
+            temperature=temperature,
         )
 
 
@@ -120,8 +130,8 @@ class AnthropicModels(EnumModels):
     @classmethod
     def models(cls) -> TypeModels:
         return {
-            cls.CLAUDE_3_OPUS.value: Model(
-                name=cls.CLAUDE_3_OPUS.value,
+            cls.CLAUDE_3_HAIKU.value: Model(
+                name=cls.CLAUDE_3_HAIKU.value,
                 context_window=200000,
                 max_output=4096,
             ),
@@ -130,8 +140,8 @@ class AnthropicModels(EnumModels):
                 context_window=200000,
                 max_output=4096,
             ),
-            cls.CLAUDE_3_HAIKU.value: Model(
-                name=cls.CLAUDE_3_HAIKU.value,
+            cls.CLAUDE_3_OPUS.value: Model(
+                name=cls.CLAUDE_3_OPUS.value,
                 context_window=200000,
                 max_output=4096,
             ),
@@ -159,6 +169,10 @@ class AnthropicIProvider(Provider):
             anthropic_api_key=self.api_key_value(),
             temperature=temperature,
         )
+
+
+anthropic = AnthropicIProvider(api_key=settings.ANTHROPIC_API_KEY)
+openai = OpenAIProvider(api_key=settings.OPENAI_API_KEY)
 
 
 if __name__ == "__main__":
