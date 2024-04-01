@@ -10,7 +10,18 @@ def translate(
     input_language: str,
     output_language: str,
 ) -> dict:
+    """
+    Translate text from one language to another.
 
+    Args:
+        chat (TypeChat): llm chat provider
+        text (str): text to translate
+        input_language (str): language of the input text
+        output_language (str): language to translate the text to
+
+    Returns:
+        dict: _description_
+    """
     system = "You are a helpful assistant that translates {input_language} to {output_language}."
     human = "{text}"
     prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human)])

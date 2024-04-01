@@ -4,9 +4,6 @@ Here's our first attempt at using data to create a table:
 """
 
 import streamlit as st
-from annotated_text import annotated_text
-from proofread import proofread
-from settings import settings
 from sidebar import sidebar
 
 st.set_page_config(page_title="Eloquence Wizard", page_icon="🧙‍♂️", layout="centered")

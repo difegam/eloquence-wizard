@@ -42,7 +42,7 @@ class EnumModels(Enum):
         return self.value
 
     @classmethod
-    def model_names(cls) -> tuple[str]:
+    def model_names(cls) -> tuple[str, ...]:
         return tuple(model.value for model in cls)
 
     @property
@@ -176,10 +176,4 @@ openai = OpenAIProvider(api_key=settings.OPENAI_API_KEY)
 
 
 if __name__ == "__main__":
-    print(OpenAIModels.model_names())
-    print(OpenAIModels.GPT_3_5_TURBO)
-    print(OpenAIModels.GPT_3_5_TURBO.model)
-
-    print(AnthropicModels.model_names())
-    print(AnthropicModels.CLAUDE_3_HAIKU)
-    print(AnthropicModels.CLAUDE_3_HAIKU.model)
+    ...
